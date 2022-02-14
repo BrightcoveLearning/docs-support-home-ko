@@ -1,0 +1,75 @@
+
+---
+title: 이미지 트랜스코더
+---
+
+<div class="BCL_objectives"><p>모바일 전송을 위해 이미지를 최적화하여 앱 성능을 크게 향상시킬 수 있는 App Cloud 이미지 트랜스코딩 서비스를 사용합니다.</p>
+  <!--break--></div>
+  <p>App Cloud는 앱의 이미지를 트랜스코딩하는 데 사용할 수 있는 서비스를 제공합니다. 이미지 트랜스코딩 서비스를 사용하면 소스 이미지를 가져와 앱에 필요한 크기와 형식으로 변환할 수 있습니다. 예를 들어 원본 이미지가 300x300픽셀이지만 앱에서 100x100으로 표시해야 하는 경우입니다. 이미지 트랜스코딩 서비스를 사용하면 이미지를 사용하는 각 컨텍스트에 대해 새 이미지 파일을 만들 필요 없이 이미지가 항상 컨텍스트에 적합한 크기인지 확인할 수 있습니다. 이미지를 자르고 JPG 이미지의 품질(압축률)을 지정할 수도 있습니다. 이미지 트랜스코딩 서비스를 사용하여 다음을 수행할 수 있습니다.</p>
+  <ul>
+      <li>앱을 표시하는 데 필요한 파일 크기와 네트워크 대역폭을 크게 줄여 앱 성능을 크게 향상시킵니다.</li>
+      <li>이미지 크기를 줄여 메모리 요구량을 줄입니다.</li>
+      <li>이미지가 모바일 장치에 표시하기에 적합한 크기인지 확인하십시오.</li>
+      <li>앱 클라우드 서버 캐시를 활용하여 앱 성능을 개선하고 자체 서버의 부하를 줄이십시오.</li>
+  </ul>
+  <p>App Cloud 이미지 트랜스코딩 서비스는 이미지와 애플리케이션 간의 프록시 역할을 합니다. 서비스는 이미지 URL에 당사의 트랜스코딩 서비스 URL을 접두사로 붙인 단순 URL로 액세스할 수 있습니다. 이를 통해 적은 노력으로 앱에 트랜스코딩 서비스를 추가할 수 있습니다. 예를 들어 다음 위치에 있는 이미지가 있는 경우<code> http://my.example.com/image.png</code>일반적으로 다음과 같이 요청할 것입니다.</p>
+  <pre>
+  &lt;이미지&nbsp; src="http://my.example.com/image.png" &nbsp; alt="Bandwidth Hungry Image" 너비="500" 높이="500" /&gt; </pre>
+  <p>100x100px의 더 작은 이미지로 코드를 변환하려면 다음 요청을 실행하기만 하면 됩니다.</p>
+  <pre>
+  &lt;이미지&nbsp; src="http://transcode.appcloud.brightcove.com?image=http://my.example.com/image.png&amp;width=100&amp;height=100" &nbsp; alt="내 Svelte 이미지" 너비="100" 높이="100" /&gt;</pre>
+  <p>원래 가로 세로 비율을 유지하면서 이미지 너비를 100px로 줄이려면:</p>
+  <pre>
+  &lt;이미지&nbsp; src="http://transcode.appcloud.brightcove.com?image=http://my.example.com/image.png&amp;width=100" 너비="100" /&gt;</pre>
+  <p>원래 가로 세로 비율을 유지하면서 이미지를 너비 100px 또는 높이 100px 중 큰 값으로 줄이려면:</p>
+  <pre>
+  &lt;이미지&nbsp; src="http://transcode.appcloud.brightcove.com?image=http://my.example.com/image.png&amp;max_dimension=100" /&gt;</pre>
+  <p>중앙에 100x100px 조각을 유지하면서 이미지를 자르려면 다음 요청을 실행하기만 하면 됩니다.</p>
+  <pre>
+  &lt;이미지&nbsp; src="http://transcode.appcloud.brightcove.com?image=http://my.example.com/image.png&amp;crop=200,200,100,100" &nbsp; alt="내 Svelte 이미지" 너비="100" 높이="100" /&gt;</pre>
+  
+  <p>이미지 트랜스코딩 서비스를 사용하려면 공개적으로 사용 가능한 URL에서 이미지에 액세스할 수 있어야 합니다. 이미지는 PNG, JPEG 또는 GIF 형식이어야 합니다.</p>
+  <h2><a name="params"></a>쿼리 매개변수</h2>
+  <p>이미지 트랜스코딩 서비스 호출은 다음 쿼리 매개변수를 사용합니다.</p>
+  <h3>이미지(필수)</h3>
+  <p>원본 이미지를 찾을 수 있는 공개적으로 액세스 가능한 URL입니다. 예를 들어, <code>이미지=http://my.example.com/image.png</code> .</p>
+  <h3>형식(선택 사항)</h3>
+  <p>다음 중 하나일 수 있는 새 이미지의 형식<code> png</code> , <code> jpg</code> , 또는<code> GIF</code> . 형식을 지정하지 않으면 출력 형식이 원본 이미지와 변경되지 않습니다.</p>
+  <h3>크기 매개변수(선택사항)</h3>
+  <p>크기 매개변수 중 하나를 사용할 수 있습니다. <code>너비</code> , <code>키</code> , 또는<code> max_dimension</code> , 새 이미지를 원본 이미지와 다른 크기로 만들려면 이 매개변수는 최종 이미지의 치수를 픽셀 단위로 지정합니다.</p>
+  <ul>
+      <li>크기 매개변수를 지정하지 않으면 새 이미지의 너비와 높이가 원본 이미지와 동일합니다.</li>
+      <li>지정하는 경우<code>너비</code> , 하지만<code>키</code> , 새 이미지는 지정한 너비를 가지며 원본 이미지의 종횡비에 따라 높이가 지정됩니다.</li>
+      <li>지정하는 경우<code>키</code> , 하지만<code>너비</code> , 새 이미지는 지정한 높이를 가지며 너비는 원본 이미지의 종횡비에 따라 결정됩니다.</li>
+      <li>지정하는 경우<code> max_dimension</code> , 새 이미지의 더 큰 치수는 지정한 크기가 되고 더 작은 치수는 원본 이미지의 종횡비에 따라 지정된 크기가 됩니다.</li>
+  </ul>
+  <p>두 가지 모두를 지정하지 않는 한 모든 경우에 새 이미지는 원본 이미지와 동일한 종횡비를 갖습니다. <code>너비</code>그리고<code>키</code>그리고 그 종횡비는 원래 종횡비와 다릅니다.</p>
+  <h3>자르기 매개변수(선택 사항)</h3>
+  <h2>트랜스코딩 유틸리티 기능 사용</h2>
+  <p>이미지를 자르려면 매개변수를 추가하세요.</p>
+  <pre>자르기=x,y,w,h</pre>
+  <p>여기서 x와 y는 왼쪽 상단 모서리(0,0)에서 픽셀 단위로 측정한 시작점의 좌표입니다. w와 h는 보존할 수평 및 수직 픽셀로 시작점에서 시작하여 오른쪽 아래로 진행합니다.</p>
+  <p>자르기와 크기 조정이 모두 지정된 경우 자르기가 먼저 적용된 다음 잘린 이미지의 크기가 조정됩니다.</p>
+  <h3>품질 매개변수(선택사항)</h3>
+  <p>JPG 이미지의 경우에만 다음 매개변수를 추가하여 결과 이미지의 압축 비율을 지정합니다.</p>
+  <pre>품질=x</pre>
+  <p>x는 적용할 압축비입니다. 기본값은 70입니다.</p>
+  <p>다음은 이미지 트랜스코딩 URL을 생성하기 위한 편리한 JavaScript 함수입니다.</p>
+  <pre>
+  함수 getTranscodeURL(url, 옵션) { var src = "http://transcode.appcloud.brightcove.com?image=" + url; if (options) { if (options.max_dimension) { src += "&amp;max_dimension=" + options.max; }또 다른{ if (options.width) { src += "&amp;width=" + options.width; } if (options.height) { src += "&amp;height=" + options.height; } } if (options.format) { src += "&amp;format=" + options.format; } if (options.crop) { src += "&amp;crop=" + options.crop; } if (options.quality) { src += "&amp;quality" + options.quality; } } 반환 src; };</pre>
+  <p>예를 들어 이미지를 200픽셀 너비로 트랜스코딩하려면 다음을 수행합니다.</p>
+  <pre>
+  var tx_url = getTranscodeURL("http://www.example.com/example.jpg", { width: 200 } );</pre>
+  <p>이미지를 160x90으로 자르려면 왼쪽에서 100px, 위쪽에서 70px 시작하고 압축 비율을 65로 지정합니다.</p>
+  <pre>var tx_url = getTranscodeURL("http://www.example.com/example.jpg", { crop: "100,70,160,90" , quality: 65 } );</pre>
+  <h2>트랜스코딩된 이미지 예</h2>
+  <p>트랜스코딩 서비스가 이미지 파일에 필요한 대역폭과 메모리를 얼마나 극적으로 줄일 수 있는지 보려면 다음 예를 살펴보십시오.</p>
+  <p>먼저 고품질 JPEG 스톡 이미지가 있습니다.<br />
+  <img alt="" src="http://img.brightcove.com/ac-transcode-before.jpg" /></p>
+  <p>이 이미지는 425x282이고 파일 크기는 130,879바이트입니다.</p>
+  <p>너비가 250인 트랜스코딩 서비스를 통해 전달:<br />
+  <img alt="" src="http://img.brightcove.com/ac-transcode-after.jpg" /></p>
+  <p>이미지는 이제 250x165이고 파일 크기는 74% 감소한 34,017바이트입니다.</p>
+  <p>마지막으로 썸네일 크기(너비=75)로 트랜스코딩할 수 있습니다.<br />
+  <img alt="" src="http://img.brightcove.com/ac-transcode-thumb.jpg" /></p>
+  <p>이미지는 이제 75x49이고 파일 크기는 7,686바이트로 94% 감소했습니다!</p>
